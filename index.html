@@ -4,10 +4,12 @@
 	<meta charset="UTF-8">
 	<title></title>
 	<script type="text/javascript" src="js/libs/require/require.js" data-main="js/main"></script>
+  <link rel="stylesheet" href="stylesheets/print.css">
 </head>
 <body>
 	<h1>PicFiltering</h1>
-	<input type="file" id="upload_file"/>
+	<input type="file" id="upload_file" multiple accept="image/*" />
 	<div draggable="true" id="drop_area">Drop Here</div>
+  <ul id="images_list"></ul>
 </body>
 </html>

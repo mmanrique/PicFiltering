@@ -1,3 +1,26 @@
 /* Welcome to Compass. Use this file to define print styles.
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/print.css" media="print" rel="stylesheet" type="text/css" /> */
+@import "compass/reset";
+
+h1{
+	font-weight:bold;
+}
+#images_list{
+	img{
+		width:100px;
+		height:100px;
+		-webkit-transition: all 0.5s;
+		&:hover{
+			-webkit-transform: scale(2) rotate(-380deg) translateZ(100px);
+		}
+	}
+	li{
+		float:left;
+	}
+}
+#drop_area{
+	height:100px;
+	width:600px;
+	background: -webkit-linear-gradient(top,rgb(30,212,212),rgb(117,235,129))
+}
