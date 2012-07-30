@@ -20,7 +20,8 @@ require.config({
 define([
 	'test/model/photo',
 	'test/collection/photoCollection',
-	'test/views/photo'
+	'test/views/photo',
+	'test/views/app'
 	], function(photoModelTest, PhotoCollectionTest, photoView){
 
 });
