@@ -7,16 +7,21 @@ h1{
 	font-weight:bold;
 }
 #images_list{
-	img{
-		width:100px;
-		height:100px;
+	
+	li{
+		$side-size: 100px;
+		float:left;
+		width:$side-size;
+		height:$side-size;
 		-webkit-transition: all 0.5s;
 		&:hover{
 			-webkit-transform: scale(2) rotate(-380deg) translateZ(100px);
 		}
-	}
-	li{
-		float:left;
+		img{
+			width:$side-size;
+			height:$side-size;
+		}
+
 	}
 }
 #drop_area{

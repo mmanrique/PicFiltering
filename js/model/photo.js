@@ -1,7 +1,8 @@
 define(['backbone', 'underscore'],function(Backbone,_){
 	var Photo=Backbone.Model.extend({
 		defaults:{
-			source:''
+			source:'',
+			name:''
 		},
 		initialize:function(){
 

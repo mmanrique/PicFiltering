@@ -1,20 +1,36 @@
-define(['views/photo', 'model/photo', 'jquery'], function(PhotoView, PhotoModel, $){
+define(['views/photo', 'model/photo', 'jquery'], function(PhotoView, PhotoModel, $) {
 	module('Photo views Test');
-	test("Has some content when created",function(){
+	test("Has some content when created", function() {
 		expect(1);
-		var photoView=new PhotoView();
-		equal('li',photoView.el.tagName.toLowerCase(), 'It has a DOM element');
+		var photoView = new PhotoView();
+		equal('li', photoView.el.tagName.toLowerCase(), 'It has a DOM element');
 	});
-	test('There is a model attached to the view',function(){
-		var photoView=new PhotoView({model:new PhotoModel()});
-		notEqual( photoView.model, undefined, 'model was added to the view');
+	test('There is a model attached to the view', function() {
+		var photoView = new PhotoView({
+			model: new PhotoModel()
+		});
+		notEqual(photoView.model, undefined, 'model was added to the view');
 	});
-	test('can render the correct content',function(){
+	test('can render the correct content', function() {
 		expect(3)
-		var photoView=new PhotoView({model:new PhotoModel({source:'Manuel'})});
+		var photoView = new PhotoView({
+			model: new PhotoModel({
+				source: 'Manuel'
+			})
+		});
 		$('#images_list').append(photoView.render().el);
 		equal(1, $('#images_list li').size(), 'List element was appended');
 		equal(1, $('#images_list li img').size(), 'Image is inside list element');
 		equal('Manuel', $('#images_list li img').attr('src'), 'Source is set correctly');
-	})
+	});
+	test('An element is removed when clicking the remove Button', function() {
+		var photoView = new PhotoView({
+			model: new PhotoModel({
+				source: 'None'
+			})
+		});
+		$('#close').click();
+		equal(0, $('#images_list li').size(), 'List element was removed' );
+		equal(0, $('#images_list img').size(), 'Image was removed');
+	});
 })
