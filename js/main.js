@@ -21,6 +21,6 @@ require.config({
 Require es una funcion que toma, un array y un callback que se va a ejecutar luego
 The names of each of the values in the first arrays are the names of the js files to import
 */
-define(['views/app'], function(App){
+define(['views/app', 'backbone'], function(App, Backbone){
 	var aplicacion=new App();
 });

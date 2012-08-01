@@ -2,13 +2,15 @@ define([
 	'backbone',
 	'underscore',
 	'jquery',
+	'pubsub',
 	'text!templates/photo.html'
-	],function(Backbone,_,$, photoTemplate){
+	],function(Backbone,_,$, PubSub,photoTemplate){
 	var PhotoView=Backbone.View.extend({
 		tagName: 'li',
 		template: _.template(photoTemplate),
 		events:{
-			"click #close": "removeView"
+			"click #close": "removeView",
+			"click img": "imageClick"
 		},
 		render:function(){
 			var $el=$(this.el);
@@ -22,6 +24,10 @@ define([
 		},
 		initialize:function(){
 			_.bindAll(this,'removeView', 'render');
+		},
+		imageClick:function(){
+			PubSub.trigger("click:imageView",this.model.get('source'))
+			
 		}
 	});
 	return PhotoView;

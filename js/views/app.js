@@ -1,13 +1,22 @@
-define(['backbone', 'jquery', 'underscore', 'views/photo', 'collection/photoCollection'], function(BackBone, $, _, PhotoView, PhotoCollection) {
+define([
+	'backbone', 
+	'jquery', 
+	'underscore', 
+	'views/photo', 
+	'collection/photoCollection',
+	'pubsub'],
+	function(BackBone, $, _, PhotoView, PhotoCollection, PubSub) {
 	var AppView = BackBone.View.extend({
 		el: $('body'),
 		initialize: function() {
 			this.$inputField = $('#upload_file');
 			this.$inputDiv = $('#drop_area');
 			this.$imageList = $('#images_list');
+			this.$canvas=$('#image_canvas');
 			_.bindAll(this, 'addPhotoCollection');
 			this.photoCollection = new PhotoCollection();
 			this.photoCollection.on('add', this.addPhotoView, this);
+			PubSub.on('click:imageView', this.displayImage, this);
 			//Here we can add listener for our Models or collection
 		},
 		events: {
@@ -52,6 +61,15 @@ define(['backbone', 'jquery', 'underscore', 'views/photo', 'collection/photoColl
 				model: photoModel
 			});
 			this.$imageList.append(photo.render().el);
+		},
+		displayImage:function(imageContent){
+			jQuery('#image_dude').attr('xlink:href',imageContent);
+			var context=this.$canvas.get(0).getContext("2d");
+			var image=new Image();
+			image.onload=function(){
+				context.drawImage(image,0,0,200,200);	
+			}
+			image.src=imageContent;
 		}
 	});
 	return AppView;
