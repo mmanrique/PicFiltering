@@ -29,7 +29,9 @@ h1{
 	width:600px;
 	background: -webkit-linear-gradient(top,rgb(30,212,212),rgb(117,235,129));
 }
-canvas{
-	width:200px;
-	height:200px;
+.non-visible{
+	display:none;
+}
+.visible{
+	display:block;
 }

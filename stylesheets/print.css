@@ -96,7 +96,11 @@ h1 {
 }
 
 /* line 32, ../sass/print.scss */
-canvas {
-  width: 200px;
-  height: 200px;
+.non-visible {
+  display: none;
+}
+
+/* line 35, ../sass/print.scss */
+.visible {
+  display: block;
 }

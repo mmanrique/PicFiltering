@@ -9,20 +9,29 @@ define([
 	var AppView = BackBone.View.extend({
 		el: $('body'),
 		initialize: function() {
+			//This runs after it's rendered
 			this.$inputField = $('#upload_file');
 			this.$inputDiv = $('#drop_area');
 			this.$imageList = $('#images_list');
-			this.$canvas=$('#image_canvas');
+			this.$controls=$('#controls');
+			
 			_.bindAll(this, 'addPhotoCollection');
 			this.photoCollection = new PhotoCollection();
 			this.photoCollection.on('add', this.addPhotoView, this);
 			PubSub.on('click:imageView', this.displayImage, this);
+			//
+
 			//Here we can add listener for our Models or collection
 		},
 		events: {
 			'click #drop_area': 'openFileLoader',
 			'change #upload_file': 'uploadImageInput',
-			'drop #drop_area': 'uploadImageDroped'
+			'drop #drop_area': 'uploadImageDroped',
+			'change #saturateControl': 'changeSaturate',
+			'change #hueControl': 'changeHue',
+			'change #redControl': 'changeRed',
+			'change #greenControl': 'changeGreen',
+			'change #blueControl': 'changeBlue'
 		},
 		openFileLoader: function() {
 			this.$inputField.click();
@@ -63,13 +72,25 @@ define([
 			this.$imageList.append(photo.render().el);
 		},
 		displayImage:function(imageContent){
-			jQuery('#image_dude').attr('xlink:href',imageContent);
-			var context=this.$canvas.get(0).getContext("2d");
-			var image=new Image();
-			image.onload=function(){
-				context.drawImage(image,0,0,200,200);	
-			}
-			image.src=imageContent;
+			//TODO:Reset all the filter values
+			$('#image_dude').attr('xlink:href',imageContent);
+			//display the controls.
+			this.$controls.addClass('visible');
+		},
+		changeSaturate:function(e){
+			$('#colorSaturate')[0].values.baseVal.getItem(0).value=e.target.value/100;
+		},
+		changeHue:function(e){
+			$('#colorHue')[0].values.baseVal.getItem(0).value=e.target.value;
+		},
+		changeRed:function(e){
+			$('#colorRed').attr('slope',e.target.value/50);
+		},
+		changeGreen:function(e){
+			$('#colorGreen').attr('slope',e.target.value/50);
+		},
+		changeBlue:function(e){
+			$('#colorBlue').attr('slope',e.target.value/50);
 		}
 	});
 	return AppView;

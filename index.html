@@ -8,12 +8,44 @@
 </head>
 <body>
 	<h1>PicFiltering</h1>
-	<input type="file" id="upload_file" multiple accept="image/*" />
+	<input type="file" id="upload_file" multiple accept="image/*" class="non-visible" />
 	<div draggable="true" id="drop_area">Drop Here</div>
-	<canvas id="image_canvas"></canvas>
 	<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="190" id="image_svg">
-		<image id='image_dude' xmlns="http://www.w3.org/2000/svg" xlink:href="http://xn--dahlstrm-t4a.net/svg/filters/colormatrix/model.jpg" xmlns:xlink="http://www.w3.org/1999/xlink" width="333" height="500"/>
+		<filter xmlns="http://www.w3.org/2000/svg" id="colormatrix" x="0" y="0" width="1" height="1">
+			<feColorMatrix id="colorSaturate" type="saturate" values="0"/>
+			<feColorMatrix id="colorHue" type="hueRotate" values="0"/>
+			<feComponentTransfer>
+				<feFuncR id="colorRed" type="linear" slope="1"/>
+				<feFuncG id="colorGreen" type="linear" slope="1"/>
+				<feFuncB id="colorBlue" type="linear" slope="1"/>
+			</feComponentTransfer>
+		</filter>
+		<image id='image_dude' xmlns="http://www.w3.org/2000/svg" xlink:href="" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" filter="url(#colormatrix)"/>
 	</svg>
+	<div id="controls" class="non-visible">
+		<ul>
+			<li>
+				<label for="saturateControl">Saturate</label>
+				<input type="range" id="saturateControl">
+			</li>
+			<li>
+				<label for="hueControl">Hue</label>
+				<input type="range" id="hueControl">
+			</li>
+			<li>
+				<label for="redControl">Red</label>
+				<input type="range" id="redControl">
+			</li>
+			<li>
+				<label for="greenControl">Green</label>
+				<input type="range" id="greenControl">
+			</li>
+			<li>
+				<label for="blueControl">Blue</label>
+				<input type="range" id="blueControl">
+			</li>
+		</ul>
+	</div>
   	<ul id="images_list"></ul>
 </body>
 </html>
