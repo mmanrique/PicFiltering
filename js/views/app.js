@@ -1,11 +1,4 @@
-define([
-	'backbone', 
-	'jquery', 
-	'underscore', 
-	'views/photo', 
-	'collection/photoCollection',
-	'pubsub'],
-	function(BackBone, $, _, PhotoView, PhotoCollection, PubSub) {
+define(['backbone', 'jquery', 'underscore', 'views/photo', 'collection/photoCollection', 'pubsub'], function(BackBone, $, _, PhotoView, PhotoCollection, PubSub) {
 	var AppView = BackBone.View.extend({
 		el: $('body'),
 		initialize: function() {
@@ -13,13 +6,12 @@ define([
 			this.$inputField = $('#upload_file');
 			this.$inputDiv = $('#drop_area');
 			this.$imageList = $('#images_list');
-			this.$controls=$('#controls');
+			this.$controls = $('#controls');
 			_.bindAll(this, 'addPhotoCollection');
 			this.photoCollection = new PhotoCollection();
 			this.photoCollection.on('add', this.addPhotoView, this);
 			PubSub.on('click:imageView', this.displayImage, this);
 			//
-
 			//Here we can add listener for our Models or collection
 		},
 		events: {
@@ -71,45 +63,53 @@ define([
 			});
 			this.$imageList.append(photo.render().el);
 		},
-		displayImage:function(imageContent){
+		displayImage: function(imageContent) {
 			//TODO:Reset all the filter values
-			$('#image_dude').attr('xlink:href',imageContent);
+			$('#image_dude').attr('xlink:href', imageContent);
 			//display the controls.
 			this.$controls.addClass('visible');
 		},
-		changeSaturate:function(e){
-			$('#colorSaturate')[0].values.baseVal.getItem(0).value=e.target.value/100;
+		changeSaturate: function(e) {
+			$('#colorSaturate')[0].values.baseVal.getItem(0).value = e.target.value / 100;
 		},
-		changeHue:function(e){
-			$('#colorHue')[0].values.baseVal.getItem(0).value=e.target.value;
+		changeHue: function(e) {
+			$('#colorHue')[0].values.baseVal.getItem(0).value = e.target.value;
 		},
-		changeRed:function(e){
-			$('#colorRed').attr('slope',e.target.value/50);
+		changeRed: function(e) {
+			$('#colorRed').attr('slope', e.target.value / 50);
 		},
-		changeGreen:function(e){
-			$('#colorGreen').attr('slope',e.target.value/50);
+		changeGreen: function(e) {
+			$('#colorGreen').attr('slope', e.target.value / 50);
 		},
-		changeBlue:function(e){
-			$('#colorBlue').attr('slope',e.target.value/50);
+		changeBlue: function(e) {
+			$('#colorBlue').attr('slope', e.target.value / 50);
 		},
-		exportImage:function(){
-			var canvas=$('#canvas_export')[0];
-    		var context=canvas.getContext("2d");
-    		var image=new Image();
-    		image.onload=function(){
-    			context.drawImage(image, 0, 0);
-    			var imageData=context.getImageData(0, 0, canvas.width, canvas.height);
-    			for (var x = 0; x < imageData.height; x++) {
-    				for(var y=0;y< imageData.width;y++){
-    					//var value=imageData.data[(y*canvas.width*4)+(x*4)]
-    					imageData.data[(x*imageData.width*4)+(y*4)+0]=$('#colorRed').attr('slope')*(255/2);
-    					imageData.data[(x*imageData.width*4)+(y*4)+1]=$('#colorGreen').attr('slope')*(255/2);
-    					//imageData.data[(x*imageData.width*4)+(y*4)+2]=$('#colorBlue').attr('slope')*(255/2);
-    				}
-    			}
-    			context.putImageData(imageData, 0, 0);
-    		}
-    		image.src=$('#image_dude').attr('xlink:href');
+		exportImage: function() {
+			var canvas = $('#canvas_export')[0];
+			var imageDataUrl = $('#image_dude').attr('xlink:href');
+			var imagen = document.createElement('img')
+			imagen.src=imageDataUrl;
+			canvas.width = imagen.width;
+			canvas.height = imagen.height;
+			var context = canvas.getContext("2d");
+			var image = new Image();
+			image.onload = function() {
+				context.fillStyle = 'white';
+				context.fillRect(0, 0, canvas.width, canvas.height);
+				context.drawImage(image, 0, 0);
+				var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+				for (var x = 0; x < imageData.height; x++) {
+					for (var y = 0; y < imageData.width; y++) {
+						var index = (x * imageData.width * 4) + (y * 4);
+						//var value=imageData.data[(y*canvas.width*4)+(x*4)]
+						imageData.data[index + 0] = imageData.data[index + 0] + ($('#colorRed').attr('slope') * (255 / 8));
+						imageData.data[index + 1] = imageData.data[index + 1] + ($('#colorGreen').attr('slope') * (255 / 8));
+						imageData.data[index + 2] = imageData.data[index + 0] + ($('#colorBlue').attr('slope') * (255 / 8));
+					}
+				}
+				context.putImageData(imageData, 0, 0);
+			}
+			image.src = imageDataUrl;
 		}
 	});
 	return AppView;
