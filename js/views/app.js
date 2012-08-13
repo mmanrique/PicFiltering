@@ -14,7 +14,6 @@ define([
 			this.$inputDiv = $('#drop_area');
 			this.$imageList = $('#images_list');
 			this.$controls=$('#controls');
-			
 			_.bindAll(this, 'addPhotoCollection');
 			this.photoCollection = new PhotoCollection();
 			this.photoCollection.on('add', this.addPhotoView, this);
@@ -31,7 +30,8 @@ define([
 			'change #hueControl': 'changeHue',
 			'change #redControl': 'changeRed',
 			'change #greenControl': 'changeGreen',
-			'change #blueControl': 'changeBlue'
+			'change #blueControl': 'changeBlue',
+			'click #export': 'exportImage'
 		},
 		openFileLoader: function() {
 			this.$inputField.click();
@@ -91,6 +91,15 @@ define([
 		},
 		changeBlue:function(e){
 			$('#colorBlue').attr('slope',e.target.value/50);
+		},
+		exportImage:function(){
+    		var context=$('#canvas_export')[0].getContext("2d");
+    		var image=new Image();
+    		image.onload=function(){
+    			context.drawImage(image, 0, 0);
+    		}
+    		image.src=$('#image_dude').attr('xlink:href');
+
 		}
 	});
 	return AppView;
