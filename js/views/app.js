@@ -93,13 +93,23 @@ define([
 			$('#colorBlue').attr('slope',e.target.value/50);
 		},
 		exportImage:function(){
-    		var context=$('#canvas_export')[0].getContext("2d");
+			var canvas=$('#canvas_export')[0];
+    		var context=canvas.getContext("2d");
     		var image=new Image();
     		image.onload=function(){
     			context.drawImage(image, 0, 0);
+    			var imageData=context.getImageData(0, 0, canvas.width, canvas.height);
+    			for (var x = 0; x < imageData.height; x++) {
+    				for(var y=0;y< imageData.width;y++){
+    					//var value=imageData.data[(y*canvas.width*4)+(x*4)]
+    					imageData.data[(x*imageData.width*4)+(y*4)+0]=$('#colorRed').attr('slope')*(255/2);
+    					imageData.data[(x*imageData.width*4)+(y*4)+1]=$('#colorGreen').attr('slope')*(255/2);
+    					//imageData.data[(x*imageData.width*4)+(y*4)+2]=$('#colorBlue').attr('slope')*(255/2);
+    				}
+    			}
+    			context.putImageData(imageData, 0, 0);
     		}
     		image.src=$('#image_dude').attr('xlink:href');
-
 		}
 	});
 	return AppView;
