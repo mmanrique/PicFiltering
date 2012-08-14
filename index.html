@@ -15,7 +15,7 @@
 			<feColorMatrix id="colorSaturate" type="saturate" values="1"/>
 			<feColorMatrix id="colorHue" type="hueRotate" values="1"/>
 			<feComponentTransfer>
-				<feFuncR id="colorRed" type="linear" slope="1"/>
+				<feFuncR id="colorRed" type="identity" slope="1" />
 				<feFuncG id="colorGreen" type="linear" slope="1"/>
 				<feFuncB id="colorBlue" type="linear" slope="1"/>
 			</feComponentTransfer>
@@ -46,7 +46,6 @@
 			</li>
 		</ul>
 		<button id="export">Export</button>
-		<canvas id="canvas_export"></canvas>
 	</div>
   	<ul id="images_list"></ul>
 

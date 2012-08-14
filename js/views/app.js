@@ -85,12 +85,12 @@ define(['backbone', 'jquery', 'underscore', 'views/photo', 'collection/photoColl
 			$('#colorBlue').attr('slope', e.target.value / 50);
 		},
 		exportImage: function() {
-			var canvas = $('#canvas_export')[0];
+			var canvas = document.createElement('canvas');
 			var imageDataUrl = $('#image_dude').attr('xlink:href');
-			var imagen = document.createElement('img')
-			imagen.src=imageDataUrl;
-			canvas.width = imagen.width;
-			canvas.height = imagen.height;
+			var imageElement = document.createElement('img')
+			imageElement.src=imageDataUrl;
+			canvas.width = imageElement.width;
+			canvas.height = imageElement.height;
 			var context = canvas.getContext("2d");
 			var image = new Image();
 			image.onload = function() {
@@ -102,12 +102,19 @@ define(['backbone', 'jquery', 'underscore', 'views/photo', 'collection/photoColl
 					for (var y = 0; y < imageData.width; y++) {
 						var index = (x * imageData.width * 4) + (y * 4);
 						//var value=imageData.data[(y*canvas.width*4)+(x*4)]
-						imageData.data[index + 0] = imageData.data[index + 0] + ($('#colorRed').attr('slope') * (255 / 8));
-						imageData.data[index + 1] = imageData.data[index + 1] + ($('#colorGreen').attr('slope') * (255 / 8));
-						imageData.data[index + 2] = imageData.data[index + 0] + ($('#colorBlue').attr('slope') * (255 / 8));
+						imageData.data[index + 0] = imageData.data[index + 0] * $('#colorRed').attr('slope');
+						imageData.data[index + 1] = imageData.data[index + 1] * $('#colorGreen').attr('slope');
+						imageData.data[index + 2] = imageData.data[index + 2] * $('#colorBlue').attr('slope');
 					}
 				}
 				context.putImageData(imageData, 0, 0);
+				imageElement.src=canvas.toDataURL("image/png");
+				var link=document.createElement('a');
+				link.href=imageElement.src;
+				link.download='exported.png';
+				link.click();
+
+				
 			}
 			image.src = imageDataUrl;
 		}
