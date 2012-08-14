@@ -85,10 +85,13 @@ define(['backbone', 'jquery', 'underscore', 'views/photo', 'collection/photoColl
 			$('#colorBlue').attr('slope', e.target.value / 50);
 		},
 		exportImage: function() {
-			var canvas = document.createElement('canvas');
 			var imageDataUrl = $('#image_dude').attr('xlink:href');
+			var colorRed = $('#colorRed').attr('slope')
+			var colorGreen = $('#colorGreen').attr('slope');
+			var colorBlue = $('#colorBlue').attr('slope');
+			var canvas = document.createElement('canvas');
 			var imageElement = document.createElement('img')
-			imageElement.src=imageDataUrl;
+			imageElement.src = imageDataUrl;
 			canvas.width = imageElement.width;
 			canvas.height = imageElement.height;
 			var context = canvas.getContext("2d");
@@ -98,23 +101,21 @@ define(['backbone', 'jquery', 'underscore', 'views/photo', 'collection/photoColl
 				context.fillRect(0, 0, canvas.width, canvas.height);
 				context.drawImage(image, 0, 0);
 				var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-				for (var x = 0; x < imageData.height; x++) {
-					for (var y = 0; y < imageData.width; y++) {
-						var index = (x * imageData.width * 4) + (y * 4);
-						//var value=imageData.data[(y*canvas.width*4)+(x*4)]
-						imageData.data[index + 0] = imageData.data[index + 0] * $('#colorRed').attr('slope');
-						imageData.data[index + 1] = imageData.data[index + 1] * $('#colorGreen').attr('slope');
-						imageData.data[index + 2] = imageData.data[index + 2] * $('#colorBlue').attr('slope');
-					}
-				}
-				context.putImageData(imageData, 0, 0);
-				imageElement.src=canvas.toDataURL("image/png");
-				var link=document.createElement('a');
-				link.href=imageElement.src;
-				link.download='exported.png';
-				link.click();
-
-				
+				var worker = new Worker("/js/views/worker.js");
+				worker.postMessage({
+					imageData: imageData,
+					colorRed: colorRed,
+					colorBlue: colorBlue,
+					colorGreen: colorGreen
+				});
+				worker.addEventListener('message', function(e) {
+					context.putImageData(e.data, 0, 0);
+					imageElement.src = canvas.toDataURL("image/png");
+					var link = document.createElement('a');
+					link.href = imageElement.src;
+					link.download = 'exported.png';
+					link.click();
+				}, false);
 			}
 			image.src = imageDataUrl;
 		}
