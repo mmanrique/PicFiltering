@@ -110,11 +110,10 @@ define(['backbone', 'jquery', 'underscore', 'views/photo', 'collection/photoColl
 				});
 				worker.addEventListener('message', function(e) {
 					context.putImageData(e.data, 0, 0);
-					imageElement.src = canvas.toDataURL("image/png");
-					var link = document.createElement('a');
-					link.href = imageElement.src;
-					link.download = 'exported.png';
-					link.click();
+					var dataUrl=canvas.toDataURL("image/png");
+					$('#downloadLink').attr('href',dataUrl);
+					$('#imagen').attr('src',dataUrl);
+					window.open(dataUrl);
 				}, false);
 			}
 			image.src = imageDataUrl;
